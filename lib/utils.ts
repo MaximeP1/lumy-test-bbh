@@ -1,5 +1,6 @@
-export const baseVideoUrl = "https://api.brest.life/items/video"
-export const basePlaylistUrl = "https://api.brest.life/items/playlist"
+export const baseVideoUrl = "https://api.brest.life/items/video/"
+export const basePlaylistUrl = "https://api.brest.life/items/playlist/"
+export const baseVideoCoverUrl = "https://api.brest.life/assets/"
 
 export const selectFields = (url: URL, fields: string[]) => {
   for (let field of fields) {
@@ -38,11 +39,29 @@ export const videoSizes: { [key: string]: { height: number, width: number }} = {
   lg: { height: 390, width: 640 },
 }
 
+export async function getVideo(id: string): Promise<Video> {
+  const url = new URL(id, baseVideoUrl);
+  selectFields(url, ['id', 'title', 'youtube_id', 'date_published', 'cover', 'duration', 'description', 'view_count', 'like_count', 'playlist.playlist_id.id', 'playlist.playlist_id.title']);
+  const data = await fetch(url);
+  const video: Video = (await data.json()).data;
+  return video;
+}
+
 export async function getLastVideos(limit: number): Promise<Video[]> {
   const url = new URL(baseVideoUrl)
   url.searchParams.append('limit', limit.toString())
   url.searchParams.append('sort', "-date_published")
-  selectFields(url, ['id', 'title', 'youtube_id', 'date_published', 'playlist.playlist_id.id', 'playlist.playlist_id.title'])
+  selectFields(url, ['id', 'title', 'youtube_id', 'date_published', 'cover', 'duration', 'playlist.playlist_id.id', 'playlist.playlist_id.title'])
+  const data = await fetch(url);
+  const videos: Video[] = (await data.json()).data;
+  return videos
+}
+
+export async function getMostViewedVideos(limit: number): Promise<Video[]> {
+  const url = new URL(baseVideoUrl)
+  url.searchParams.append('limit', limit.toString())
+  url.searchParams.append('sort', "-view_count")
+  selectFields(url, ['id', 'title', 'youtube_id', 'date_published', 'cover', 'duration', 'view_count', 'playlist.playlist_id.id', 'playlist.playlist_id.title'])
   const data = await fetch(url);
   const videos: Video[] = (await data.json()).data;
   return videos
@@ -52,7 +71,7 @@ export async function getPlaylistVideos(playlist_id: string): Promise<Video[]> {
   const url = new URL(baseVideoUrl)
   url.searchParams.append('sort', "-date_published")
   url.searchParams.append('filter[playlist][playlist_id][_eq]', playlist_id)
-  selectFields(url, ['id', 'title', 'youtube_id', 'date_published'])
+  selectFields(url, ['id', 'title', 'youtube_id', 'date_published', 'cover', 'duration'])
   const data = await fetch(url);
   const videos: Video[] = (await data.json()).data;
   return videos
@@ -70,4 +89,13 @@ export async function getSeasonsVideos(season: string) {
   if (!playlistID) return []
 
   return await getPlaylistVideos(playlistID.toString())
+}
+
+export async function getPlaylists(limit: number): Promise<Playlist[]> {
+  const url = new URL(basePlaylistUrl)
+  url.searchParams.append('limit', limit.toString())
+  selectFields(url, ['id', 'title', 'youtube_id', 'video', 'cover', 'description'])
+  const data = await fetch(url);
+  const playlists: Playlist[] = (await data.json()).data;
+  return playlists
 }

@@ -12,7 +12,7 @@ export default async function CustomPlaylistVideos({ bannerSrc, backgroundColor,
   const videos = await getPlaylistVideos(playlistId.toString());
 
   return <div style={{ backgroundColor }} className="p-4 rounded-3xl">
-    {bannerSrc && <Image src={bannerSrc} alt="Bannière d'une playlist" fill className="static"/>}
-    <CarrouselVideos size="sm" videos={videos} />
+    {bannerSrc && <Image src={bannerSrc} alt="Bannière d'une playlist" fill className="!static"/>}
+    <CarrouselVideos size="sm" videos={videos} withLabels />
   </div>
 }

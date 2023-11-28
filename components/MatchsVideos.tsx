@@ -17,7 +17,7 @@ export default function MatchsVideos() {
     fetchVideos(selectedSeason)
   }, [selectedSeason, fetchVideos])
 
-  return <CarrouselVideos videos={videos} title="Retour sur les matchs" size="md">
+  return <CarrouselVideos videos={videos} title="Retour sur les matchs" size="md" withLabels>
     <div className="flex gap-4">
       {Object.entries(seasonsPlaylistsTitles).map(([season, id]) => <Button key={id} variant={season === selectedSeason ? "faded" : "ghost"} className="rounded-full" onClick={() => setSelectedSeason(season)}>{season}</Button>)}
     </div>

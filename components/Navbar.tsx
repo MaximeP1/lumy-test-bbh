@@ -10,12 +10,12 @@ export default function Navmenu() {
     <Navbar maxWidth="full" className="py-2 px-6 bg-black">
       <NavbarContent className="hidden sm:flex gap-4" justify="start">
         <NavbarItem isActive>
-          <Link href="#" color="foreground">
+          <Link href="/" color="foreground">
             Accueil
           </Link>
         </NavbarItem>
         <NavbarItem>
-          <Link href="#" color="foreground">
+          <Link href="/playlists" color="foreground">
             Playlists
           </Link>
         </NavbarItem>
@@ -35,7 +35,7 @@ export default function Navmenu() {
       </NavbarContent>
       <NavbarContent justify="end">
         <NavbarItem>
-          <Button as={Link} href="#" variant="flat">
+          <Button as={Link} href="http://bbh.bzh" variant="flat">
             bbh.bzh &gt;
           </Button>
         </NavbarItem>
